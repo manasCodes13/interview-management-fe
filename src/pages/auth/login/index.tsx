@@ -4,8 +4,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Logo from "../../../../public/logo.png"
 import React from 'react'
+import { useRouter } from 'next/router';
 
 const Login = () => {
+    const router = useRouter()
+
     const onFinish = (values: any) => {
         console.log('Received values of form: ', values);
     };
@@ -46,7 +49,9 @@ const Login = () => {
                         </Form.Item>
 
                         <Form.Item className='w-full'>
-                            <Button type="primary" htmlType="submit" className="login-form-button w-full" size='large'>
+                            <Button type="primary" htmlType="submit" className="login-form-button w-full" size='large' onClick={() => {
+                                router.push("/dashboard")
+                            }} >
                                 Log in
                             </Button>
                             <p className='text-center mt-3 text-blue-600 underline '>

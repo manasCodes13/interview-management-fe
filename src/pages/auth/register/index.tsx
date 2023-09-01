@@ -5,25 +5,42 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Logo from "../../../../public/logo.png"
 import React, { useState } from 'react'
+import { shallow } from 'zustand/shallow';
+import { userAuthDetails } from '@/store/global';
+import { registerUser, verifyOtp } from '@/methods/auth/auth';
+import { verifyOTP } from '@/methods/auth/authInterface';
 
 const Register = () => {
-    const [open, setOpen] = useState(false);
-
     const router = useRouter()
 
+    const [email, addAuthEmail] = userAuthDetails(
+        (state) => [state.email, state.addAuthEmail],
+        shallow
+    )
+
+    const [open, setOpen] = useState(false);
+    const [otp, setOtp] = useState(0)
 
     const showModal = () => {
         setOpen(true);
     };
 
-
     const handleCancel = () => {
         setOpen(false);
     };
 
-    const onFinish = (values: any) => {
-        console.log('Received values of form: ', values);
+    const onFinish = async (values: any) => {
+        addAuthEmail(values.email)
+        const registerUserAPIFunction = await registerUser(values);
+        if (registerUserAPIFunction) {
+            setOpen(true);
+        }
     };
+
+    const verifyOTPFunction = async ({ email, otp }: verifyOTP) => {
+        const verifyOTPAPIFunction = await verifyOtp({ email, otp })
+    }
+
 
     return (
         <>
@@ -62,7 +79,7 @@ const Register = () => {
                             </Form.Item>
 
                             <Form.Item className='w-full'>
-                                <Button type="primary" htmlType="submit" className="login-form-button w-full" size='large' onClick={showModal}>
+                                <Button type="primary" htmlType="submit" className="login-form-button w-full" size='large'>
                                     Create Account
                                 </Button>
                                 <p className='text-center mt-3 text-blue-600 underline '>
@@ -81,7 +98,10 @@ const Register = () => {
                 onCancel={handleCancel}
                 centered
                 footer={[
-                    <Button onClick={() => { router.push("/auth/login") }} className='text-white'>Verify</Button>
+                    <Button onClick={() => {
+                        verifyOTPFunction({ email, otp })
+                        router.push("/auth/login")
+                    }} className='text-white'>Verify</Button>
                 ]}
             >
                 <div className='w-full my-7 flex flex-col gap-3 text-gray-500'>
@@ -90,6 +110,9 @@ const Register = () => {
                         className='w-full'
                         size='large'
                         placeholder="Enter Your OTP"
+                        onChange={(e) => {
+                            setOtp(Number(e.target.value))
+                        }}
                     />
                 </div>
 
