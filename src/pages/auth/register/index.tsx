@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Modal } from 'antd'
 import Image from 'next/image';
@@ -7,7 +8,7 @@ import Logo from "../../../../public/logo.png"
 import React, { useState } from 'react'
 import { shallow } from 'zustand/shallow';
 import { userAuthDetails } from '@/store/global';
-import { registerUser, verifyOtp } from '@/methods/auth/auth';
+import { registerUser, resendOtp, verifyOtp } from '@/methods/auth/auth';
 import { verifyOTP } from '@/methods/auth/authInterface';
 
 const Register = () => {
@@ -20,10 +21,6 @@ const Register = () => {
 
     const [open, setOpen] = useState(false);
     const [otp, setOtp] = useState(0)
-
-    const showModal = () => {
-        setOpen(true);
-    };
 
     const handleCancel = () => {
         setOpen(false);
@@ -39,8 +36,11 @@ const Register = () => {
 
     const verifyOTPFunction = async ({ email, otp }: verifyOTP) => {
         const verifyOTPAPIFunction = await verifyOtp({ email, otp })
-    }
 
+        if(verifyOTPAPIFunction) {
+            router.push("/auth/login")
+        }
+    }
 
     return (
         <>
@@ -95,13 +95,14 @@ const Register = () => {
             <Modal
                 open={open}
                 title="Verify Your Email"
+                // maskClosable={false}
                 onCancel={handleCancel}
                 centered
                 footer={[
                     <Button onClick={() => {
                         verifyOTPFunction({ email, otp })
-                        router.push("/auth/login")
-                    }} className='text-white'>Verify</Button>
+                    }} 
+                    className='text-white'>Verify</Button>
                 ]}
             >
                 <div className='w-full my-7 flex flex-col gap-3 text-gray-500'>
@@ -114,6 +115,9 @@ const Register = () => {
                             setOtp(Number(e.target.value))
                         }}
                     />
+                    <div className='mt-4'>
+                        <p>Didn&apos;t get the OTP, <span className='text-blue-600 cursor-pointer' onClick={() => {resendOtp({email})}}>Resend OTP</span></p>
+                    </div>
                 </div>
 
             </Modal>

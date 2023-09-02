@@ -5,12 +5,18 @@ import Link from 'next/link';
 import Logo from "../../../../public/logo.png"
 import React from 'react'
 import { useRouter } from 'next/router';
+import { login } from '@/methods/auth/auth';
 
 const Login = () => {
     const router = useRouter()
 
-    const onFinish = (values: any) => {
-        console.log('Received values of form: ', values);
+    const onFinish = async (values: any) => {
+        const loginApiCall = await login(values)
+        if(loginApiCall) {
+            localStorage.setItem("user", JSON.stringify(loginApiCall));
+            localStorage.setItem("accessToken", loginApiCall?.accessToken);
+            console.log(loginApiCall)
+        }
     };
 
     return (
