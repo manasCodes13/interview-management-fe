@@ -5,15 +5,51 @@ import {
   ShareAltOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { BASE_URL } from "@/utils/network";
+import axios from "axios";
 import { Avatar, Button, Input, Tooltip } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getUserDetails } from "@/methods/common/common";
+import { toast } from "react-toastify";
+
 
 interface TopbarpropsInterface {
   className?: string;
 }
 
 const Topbar = ({ className }: TopbarpropsInterface) => {
-  const onSearch = (value: string) => console.log(value);
+  const [user, setUser] = useState<any>()
+
+let accessToken:any;
+let userDetails: any;
+
+if(typeof window != "undefined") {
+    accessToken = localStorage?.getItem("accessToken");
+    userDetails = localStorage?.getItem("user");
+}
+
+let email: string;
+
+if (userDetails) {
+  email = JSON.parse(userDetails)?.data?.email;
+}
+
+const getUserDetailsFunc = async () => {
+  const userDetailsAPIFunCall = await getUserDetails({accessToken, email})
+
+  if(userDetailsAPIFunCall?.success) {
+    setUser(userDetailsAPIFunCall?.data)
+  }
+  else {
+    toast(`${userDetailsAPIFunCall?.message}`, { autoClose: 2000, type: 'error' })
+  }
+};
+
+useEffect(() => {
+  getUserDetailsFunc()
+},[accessToken])
+
+  
 
   return (
     <div className={className}>
@@ -47,7 +83,9 @@ const Topbar = ({ className }: TopbarpropsInterface) => {
           prefix={<SearchOutlined />}
           placeholder="Search"
         />
-        <Avatar className="bg-red-400">M</Avatar>
+        <Avatar className="bg-red-400">{
+          user?.name ? "M" : "N"
+        }</Avatar>
       </div>
     </div>
   );
