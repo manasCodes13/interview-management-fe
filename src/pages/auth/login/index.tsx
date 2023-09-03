@@ -6,16 +6,22 @@ import Logo from "../../../../public/logo.png"
 import React from 'react'
 import { useRouter } from 'next/router';
 import { login } from '@/methods/auth/auth';
+import { toast } from "react-toastify";
+
 
 const Login = () => {
     const router = useRouter()
 
     const onFinish = async (values: any) => {
         const loginApiCall = await login(values)
-        if(loginApiCall) {
+        if(loginApiCall?.success) {
+            console.log('loginApiCall', loginApiCall)
+            toast(`${loginApiCall?.message}`, { autoClose: 2000, type: 'success' })
             localStorage.setItem("user", JSON.stringify(loginApiCall));
             localStorage.setItem("accessToken", loginApiCall?.accessToken);
-            console.log(loginApiCall)
+        }
+        else {
+            toast(`${loginApiCall?.message}`, { autoClose: 2000, type: 'error' })
         }
     };
 

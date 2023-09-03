@@ -4,6 +4,8 @@ import Image from "next/image";
 import { Button, Form, Input } from "antd";
 import { createOrg } from "@/methods/auth/auth";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+
 
 const CreateOrganization = () => {
 
@@ -12,9 +14,12 @@ const CreateOrganization = () => {
   const onFinish = async (values: any) => {
     const createOrganizationFunCall = await createOrg(values);
 
-    if(createOrganizationFunCall) {
-      console.log(createOrganizationFunCall)
+    if(createOrganizationFunCall?.success) {
+      toast(`${createOrganizationFunCall?.message}`, { autoClose: 2000, type: 'success' })
       router.push("/dashboard")
+    }
+    else {
+      toast(`${createOrganizationFunCall?.message}`, { autoClose: 2000, type: 'error' })
     }
   };
 

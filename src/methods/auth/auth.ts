@@ -24,8 +24,8 @@ export const registerUser = async (registerValues: registerValues) => {
         let userRegisterAPIcall = await axios.post(`${BASE_URL}${registerUserAPI}`, body)
         return userRegisterAPIcall?.data
     }
-    catch (err) {
-        return err
+    catch (err: any) {
+        return err?.response?.data
     }
 };
 
@@ -37,8 +37,8 @@ export const verifyOtp = async ({ email, otp }: verifyOTP) => {
         let verifyOtpAPIcall = await axios.post(`${BASE_URL}${verifyOTPAPI}`, body)
         return verifyOtpAPIcall?.data
     }
-    catch (err) {
-        return err;
+    catch (err: any) {
+        return err?.response?.data;
     }
 }
 
@@ -54,8 +54,8 @@ export const resendOtp = async ({email}: resendOtpInterface) => {
             return resendOtpAPIcall?.data
         }
     }
-    catch(err) {
-        return err;
+    catch(err: any) {
+        return err?.response?.data;
     }
 }
 
@@ -71,8 +71,8 @@ export const login = async (registerValues: registerValues) => {
             return loginAPIcall?.data
         }
     }
-    catch(err) {
-        return err;
+    catch(err: any) {
+        return err?.response?.data;
     }
 }
 
@@ -88,7 +88,7 @@ export const createOrg = async (createOrgValues: createOrgInterface) => {
             return createOrgAPICall?.data
         }
     }
-    catch(err) {
-        return err;
+    catch(err: any) {
+        return err?.response?.data;
     }
 }

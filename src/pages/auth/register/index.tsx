@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Modal } from 'antd'
+import { Button, Form, Input, Modal, notification } from 'antd'
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -9,7 +9,9 @@ import React, { useState } from 'react'
 import { shallow } from 'zustand/shallow';
 import { userAuthDetails } from '@/store/global';
 import { registerUser, resendOtp, verifyOtp } from '@/methods/auth/auth';
-import { verifyOTP } from '@/methods/auth/authInterface';
+import {  verifyOTP } from '@/methods/auth/authInterface';
+import { toast } from "react-toastify";
+
 
 const Register = () => {
     const router = useRouter()
@@ -29,16 +31,36 @@ const Register = () => {
     const onFinish = async (values: any) => {
         addAuthEmail(values.email)
         const registerUserAPIFunction = await registerUser(values);
-        if (registerUserAPIFunction) {
+        if (registerUserAPIFunction?.success) {
+            toast(`${registerUserAPIFunction?.message}`, { autoClose: 2000, type: 'success' })
             setOpen(true);
         }
+        else {
+            toast(`${registerUserAPIFunction?.message}`, { autoClose: 2000, type: 'error' })
+        }
+        
     };
 
     const verifyOTPFunction = async ({ email, otp }: verifyOTP) => {
         const verifyOTPAPIFunction = await verifyOtp({ email, otp })
 
-        if(verifyOTPAPIFunction) {
-            router.push("/auth/login")
+        if(verifyOTPAPIFunction?.success) {
+            toast(`${verifyOTPAPIFunction?.message}`, { autoClose: 2000, type: 'success' })
+            router.push("/auth/organization")
+        }
+        else {
+            toast(`${verifyOTPAPIFunction?.message}`, { autoClose: 2000, type: 'error' })
+        }
+    }
+
+    const resendOtpFunction = async (email: string) => {
+        const resendOtpFunctionCall = await resendOtp({email})
+
+        if(resendOtpFunctionCall?.success) {
+            toast(`${resendOtpFunctionCall?.message}`, { autoClose: 2000, type: 'success' })
+        }
+        else {
+            toast(`${resendOtpFunctionCall?.message}`, { autoClose: 2000, type: 'error' })
         }
     }
 
@@ -116,7 +138,9 @@ const Register = () => {
                         }}
                     />
                     <div className='mt-4'>
-                        <p>Didn&apos;t get the OTP, <span className='text-blue-600 cursor-pointer' onClick={() => {resendOtp({email})}}>Resend OTP</span></p>
+                        <p>Didn&apos;t get the OTP, <span className='text-blue-600 cursor-pointer' onClick={() => {
+                            resendOtpFunction(email)
+                        }}>Resend OTP</span></p>
                     </div>
                 </div>
 
