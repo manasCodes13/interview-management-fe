@@ -14,4 +14,13 @@ export const userAuthDetails = create<State & Action>((set) => ({
     addAuthEmail: (email) => set((state) => ({ email: email }))
 }))
 
+interface userDetailsProps {
+    [key: string]: any;
+}
 
+
+export const authDetails = atom({})
+export const userDetail = atom<userDetailsProps>({});
+export const accessTokenStore = atom<string>("")
+export const reloaduserDetails = atom<boolean>(false)
+export const breadcrumbStore = atom<any>([])

@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 
 
 const Organization = () => {
-  const router= useRouter()
+  const router = useRouter()
 
   return (
     <div className="w-screen h-screen bg-blue-600 flex items-center flex-col gap-10">
@@ -49,7 +49,11 @@ const Organization = () => {
           </div>
         </Card>
         {/* Join Organization */}
-        <Card style={{ width: 400, height: 150, cursor: "pointer" }}>
+        <Card style={{ width: 400, height: 150, cursor: "pointer" }}
+          onClick={() => {
+            router.push("/auth/organization/joinOrganization")
+          }}
+        >
           <div className="flex items-center">
             <div className="h-full w-[20%]">
               <Image
@@ -64,13 +68,13 @@ const Organization = () => {
                 Join Organization
               </span>
               <span className="text-gray-600 text-sm mt-2">
-                Join an organization as a member, and be the part of the crew of your captain. 
+                Join an organization as a member, and be the part of the crew of your captain.
               </span>
             </div>
           </div>
         </Card>
       </div>
-    
+
     </div>
   );
 };

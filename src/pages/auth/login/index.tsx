@@ -7,16 +7,20 @@ import React from 'react'
 import { useRouter } from 'next/router';
 import { login } from '@/methods/auth/auth';
 import { toast } from "react-toastify";
+import { authDetails } from '@/store/global';
+import { useAtom } from 'jotai';
 
 
 const Login = () => {
     const router = useRouter()
+    const [loginDetails, setLoginDetails] = useAtom(authDetails)
 
     const onFinish = async (values: any) => {
         const loginApiCall = await login(values)
-        if(loginApiCall?.success) {
+        if (loginApiCall?.success) {
             console.log('loginApiCall', loginApiCall)
             toast(`${loginApiCall?.message}`, { autoClose: 2000, type: 'success' })
+            setLoginDetails(loginApiCall)
             localStorage.setItem("user", JSON.stringify(loginApiCall));
             localStorage.setItem("accessToken", loginApiCall?.accessToken);
         }

@@ -13,6 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
     "/auth/register",
     "/auth/organization",
     "/auth/organization/createOrganization",
+    "/auth/organization/joinOrganization",
   ];
 
   return (

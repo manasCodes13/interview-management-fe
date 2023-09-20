@@ -2,11 +2,6 @@ import { BASE_URL } from "@/utils/network"
 import axios from "axios"
 import { createOrgInterface, registerValues, resendOtpInterface, verifyOTP } from "./authInterface";
 
-
-let token = ""
-
-
-
 // API's
 const registerUserAPI = "/auth/register"
 const verifyOTPAPI = "/auth/verifyOtp"
@@ -42,7 +37,7 @@ export const verifyOtp = async ({ email, otp }: verifyOTP) => {
     }
 }
 
-export const resendOtp = async ({email}: resendOtpInterface) => {
+export const resendOtp = async ({ email }: resendOtpInterface) => {
     const body = {
         email: email
     }
@@ -50,11 +45,11 @@ export const resendOtp = async ({email}: resendOtpInterface) => {
     try {
         let resendOtpAPIcall = await axios.post(`${BASE_URL}${resendOtpAPI}`, body)
 
-        if(resendOtpAPIcall) {
+        if (resendOtpAPIcall) {
             return resendOtpAPIcall?.data
         }
     }
-    catch(err: any) {
+    catch (err: any) {
         return err?.response?.data;
     }
 }
@@ -67,11 +62,11 @@ export const login = async (registerValues: registerValues) => {
 
     try {
         let loginAPIcall = await axios.post(`${BASE_URL}${loginAPI}`, body)
-        if(loginAPIcall) {
+        if (loginAPIcall) {
             return loginAPIcall?.data
         }
     }
-    catch(err: any) {
+    catch (err: any) {
         return err?.response?.data;
     }
 }
@@ -84,11 +79,11 @@ export const createOrg = async (createOrgValues: createOrgInterface) => {
     }
     try {
         let createOrgAPICall = await axios.post(`${BASE_URL}${createOrgAPI}`, body)
-        if(createOrgAPICall) {
+        if (createOrgAPICall) {
             return createOrgAPICall?.data
         }
     }
-    catch(err: any) {
+    catch (err: any) {
         return err?.response?.data;
     }
 }
