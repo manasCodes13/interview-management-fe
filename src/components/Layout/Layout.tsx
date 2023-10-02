@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import Logo from "../../../public/logo.png";
 import { Breadcrumb, Image, Layout, Menu, MenuProps, theme } from 'antd';
-import { AppstoreAddOutlined, LaptopOutlined, NotificationOutlined, ProjectOutlined, UserOutlined } from "@ant-design/icons";
+import { AppstoreAddOutlined, LaptopOutlined, MessageOutlined, NotificationOutlined, ProjectOutlined, UserOutlined } from "@ant-design/icons";
 import { useAtom } from "jotai";
 import { breadcrumbStore } from "@/store/global";
 import { useRouter } from "next/router";
@@ -39,6 +39,14 @@ const sidebarContent = [
       }
     ]
   },
+  {
+    id: 3,
+    title: "Chat",
+    icon: MessageOutlined,
+    url: "/chat",
+    dropdown: false,
+    children: []
+  },
 ];
 
 
@@ -46,8 +54,6 @@ const sidebarContent = [
 const Layouts = ({ children }: any) => {
   const [breadcrumb] = useAtom(breadcrumbStore)
   const router = useRouter();
-
-  console.log('breadcrumb', breadcrumb)
 
   const {
     token: { colorBgContainer },

@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Logo from "../../../public/logo.png";
-import Image from "next/image";
 import {
   AppstoreAddOutlined,
-  LeftOutlined,
+  MessageOutlined,
   ProjectOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/router";
-import { Button, Input, Modal } from "antd";
-import { inviteTeamMatesMethod } from "@/methods/organization/organization";
-import { toast } from "react-toastify";
+import { Button } from "antd";
 
 
 interface SidebarPropsInterface {
@@ -36,6 +32,15 @@ const sidebarContent = [
     parent: "Project Management",
     child: "Projects",
   },
+  {
+    id: 3,
+    title: "Chat",
+    icon: <MessageOutlined />,
+    dropdown: false,
+    url: "/chat",
+    parent: "Chat",
+    child: ""
+  }
 ];
 
 const Sidebar = ({ className }: SidebarPropsInterface) => {
